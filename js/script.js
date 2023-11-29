@@ -165,6 +165,65 @@ const Keyboard = {
       return key.length === 1 && /[а-яА-ЯЁё]/.test(key);
     },
 
+
+    _createIconHtml(iconName) {
+      return `<i class="material-icons">${iconName}</i>`;
+    },
+  
+    _createKeys() {
+      const fragment = document.createDocumentFragment();
+      const keyLayout = this.keyLayout;
+    
+      keyLayout[this.properties.lang].forEach((key) => {
+        const keyElement = document.createElement('button');
+        const insertLineBreak =
+          ['backspace', 'p', 'enter', '/', '?', 'ъ'].indexOf(key) !== -1;
+    
+        keyElement.setAttribute('type', 'button');
+        keyElement.classList.add('keyboard__key');
+    
+        switch (key) {
+          case 'backspace':
+            keyElement.classList.add('keyboard__key--wide');
+            keyElement.innerHTML = this._createIconHtml('backspace');
+            keyElement.addEventListener('click', (e) => {
+              let { lang, value, position } = this.properties;
+              if (position > 0) {
+                this.properties.value = `${value.substring(
+                  0,
+                  position === 0 ? 0 : position - 1
+                )}${value.substring(position, value.length)}`;
+                this.properties.position = position <= 0 ? 0 : position - 1;
+              }
+    
+              this._triggerEvent('oninput', 'backspace');
+            });
+            break;
+    
+          case 'enter':
+            keyElement.classList.add('keyboard__key--wide');
+            keyElement.innerHTML = this._createIconHtml('keyboard_return');
+            keyElement.addEventListener('click', (e) => {
+              this._changeValueByPosition('\n');
+              this._triggerEvent('oninput');
+              const { lang } = this.properties;
+            });
+            break;
+    
+          
+        }
+    
+        fragment.appendChild(keyElement);
+    
+        if (insertLineBreak) {
+          fragment.appendChild(document.createElement('br'));
+        }
+      });
+    
+      return fragment;
+    },
+
+    
     open(initialValue, oninput, onclose) {
         this.properties.value = initialValue || '';
         this.eventHandlers.oninput = oninput;
