@@ -16,9 +16,7 @@ const Keyboard = {
       capsLock: false,
       lang: 'en',
       shift: false,
-      position: 0,
-      voice: false,
-    
+      position: 0
     },
   
     keyLayout: {
@@ -27,14 +25,14 @@ const Keyboard = {
         'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
         'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'enter',
         'shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',
-        'done', 'voice',  'lang', 'space', 'left', 'right'
+        'done',   'lang', 'space', 'left', 'right'
       ],
       ru: [
         '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'backspace',
         'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ',
         'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
         'shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', ',', '.', '?',
-        'done', 'voice',  'lang', 'space', 'left', 'right'
+        'done',   'lang', 'space', 'left', 'right'
       ],
     },
   
@@ -269,18 +267,51 @@ const Keyboard = {
                 });
                 break;
           
-        }
-    
-        fragment.appendChild(keyElement);
-    
-        if (insertLineBreak) {
-          fragment.appendChild(document.createElement('br'));
-        }
-      });
-    
-      return fragment;
-    },
-
+                case 'left':
+                  keyElement.classList.add('keyboard__key--wide');
+                  keyElement.innerHTML = this._createIconHtml('arrow_back');
+                  keyElement.addEventListener('click', (e) => {
+                    const pos = this.properties.position - 1;
+                    this.properties.position = pos >= 0 ? pos : 0;
+                    const { lang } = this.properties;
+                  
+                    this._changePosition();
+                  });
+                  break;
+        
+                case 'right':
+                  keyElement.classList.add('keyboard__key--wide');
+                  keyElement.innerHTML = this._createIconHtml('arrow_forward');
+                  keyElement.addEventListener('click', (e) => {
+                    const pos = this.properties.position + 1;
+                    const length = this.properties.value.length;
+                    this.properties.position = pos < length ? pos : length;
+                    const { lang } = this.properties;
+                  
+                    this._changePosition();
+                  });
+                  break;
+        
+                default:
+                  keyElement.textContent = this._toggleCase(key);
+                  keyElement.addEventListener('click', (e) => {
+                    this._changeValueByPosition(keyElement.textContent);
+                    this._triggerEvent('oninput');
+                    const { lang } = this.properties;
+                 
+                  });
+                  break;
+              }
+        
+              fragment.appendChild(keyElement);
+        
+              if (insertLineBreak) {
+                fragment.appendChild(document.createElement('br'));
+              }
+            });
+        
+            return fragment;
+          },
     
     open(initialValue, oninput, onclose) {
         this.properties.value = initialValue || '';
@@ -297,4 +328,4 @@ const Keyboard = {
     
     window.addEventListener('DOMContentLoaded', function () {
       Keyboard.init();
-    });
+ });
