@@ -209,7 +209,65 @@ const Keyboard = {
               const { lang } = this.properties;
             });
             break;
+
+            case 'caps':
+            keyElement.classList.add('keyboard__key--wide', 'keyboard__key--activatable');
+            keyElement.innerHTML = this._createIconHtml('keyboard_capslock');
+            if (this.properties.capsLock) {
+              keyElement.classList.add('keyboard__key--active');
+            }
+            keyElement.addEventListener('click', (e) => {
+              this._toggleCapsLock();
+              const lang = this.properties.lang;
+        
+            });
+            break;
     
+            case 'shift':
+              keyElement.classList.add('keyboard__key--wide');
+              keyElement.innerHTML = this._createIconHtml('keyboard_arrow_up');
+              if (this.properties.shift) {
+                keyElement.classList.add('keyboard__key--active-once');
+              }
+              keyElement.addEventListener('click', (e) => {
+                this._toggleShift();
+                const { lang } = this.properties;
+              });
+    
+              break;
+    
+            case 'done':
+              keyElement.classList.add('keyboard__key--dark');
+              keyElement.innerHTML = this._createIconHtml('keyboard_hide');
+              keyElement.addEventListener('click', (e) => {
+                this.close();
+                const { lang } = this.properties;
+               
+                this._triggerEvent('onclose');
+              });
+              break;
+
+              case 'lang':
+                keyElement.classList.add('keyboard__key--dark');
+                keyElement.innerHTML = this._toggleCase(this.properties.lang);
+                keyElement.addEventListener('click', (e) => {
+                  this._toggleLang();
+                  keyElement.innerHTML = this.properties.lang;
+                  const { lang } = this.properties;
+                
+                });
+                break;
+      
+              case 'space':
+                keyElement.classList.add('keyboard__key--extra-wide');
+                keyElement.innerHTML = this._createIconHtml('space_bar');
+                keyElement.addEventListener('click', (e) => {
+                  this._changeValueByPosition(' ');
+                  const { lang } = this.properties;
+                 
+                  this._triggerEvent('oninput');
+                });
+                break;
           
         }
     
