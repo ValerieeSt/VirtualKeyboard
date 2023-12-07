@@ -312,6 +312,37 @@ const Keyboard = {
         
             return fragment;
           },
+
+          _changeValueByPosition(text) {
+            const { position, value } = this.properties;
+            const length = value.length;
+            const keyVal = this._toggleCase(text);
+            this.properties.value = `${value.slice(0, position)}${keyVal}${value.slice(
+              position,
+              length
+            )}`;
+          },
+        
+        
+          _triggerEvent(handlerName, args) {
+            if (typeof this.eventHandlers[handlerName] === 'function') {
+              this.eventHandlers[handlerName](this.properties.value, args);
+            }
+          },
+        
+          _toggleCapsLock() {
+            this.properties.capsLock = !this.properties.capsLock;
+            const capsLock = this.properties.capsLock;
+            for (const key of this.elements.keys) {
+              if (key.childElementCount === 0) {
+                key.textContent = this._toggleCase(key.textContent);
+              } else {
+                if (key.children[0].textContent === 'keyboard_capslock') {
+                  key.classList.toggle('keyboard__key--active', capsLock);
+                }
+              }
+            }
+          },
     
     open(initialValue, oninput, onclose) {
         this.properties.value = initialValue || '';
