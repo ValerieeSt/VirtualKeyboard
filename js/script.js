@@ -343,6 +343,124 @@ const Keyboard = {
               }
             }
           },
+          _alternateKeys() {
+            for (const key of this.elements.keys) {
+              if (key.childElementCount === 0) {
+                switch (key.textContent) {
+                  case ',':
+                    key.textContent = ';';
+                    break;
+                  case '.':
+                    key.textContent = ':';
+                    break;
+                  case '?':
+                    key.textContent = '/';
+                    break;
+                  case ';':
+                    key.textContent = ',';
+                    break;
+                  case ':':
+                    key.textContent = '.';
+                    break;
+                  case '/':
+                    key.textContent = '?';
+                    break;
+                  case '1':
+                    key.textContent = '!';
+                    break;
+                  case '2':
+                    if (this.properties.lang === 'en') {
+                      key.textContent = '@';
+                    } else {
+                      key.textContent = '"';
+                    }
+                    break;
+                  case '3':
+                    if (this.properties.lang === 'en') {
+                      key.textContent = '#';
+                    } else {
+                      key.textContent = '№';
+                    }
+                    break;
+                  case '4':
+                    key.textContent = '$';
+                    break;
+                  case '5':
+                    key.textContent = '%';
+                    break;
+                  case '6':
+                    key.textContent = '^';
+                    break;
+                  case '7':
+                    key.textContent = '&';
+                    break;
+                  case '8':
+                    key.textContent = '*';
+                    break;
+                  case '9':
+                    if (this.properties.lang === 'en') {
+                      key.textContent = '(';
+                    } else {
+                      key.textContent = '{';
+                    }
+                    break;
+                  case '0':
+                    if (this.properties.lang === 'en') {
+                      key.textContent = ')';
+                    } else {
+                      key.textContent = '}';
+                    }
+                    break;
+                  case '!':
+                    key.textContent = '1';
+                    break;
+                  case '@':
+                    key.textContent = '2';
+                    break;
+                  case '"':
+                    key.textContent = '2';
+                    break;
+                  case '#':
+                    key.textContent = '3';
+                    break;
+                  case '№':
+                    key.textContent = '3';
+                    break;
+                  case '$':
+                    key.textContent = '4';
+                    break;
+                  case '%':
+                    key.textContent = '5';
+                    break;
+                  case '^':
+                    key.textContent = '6';
+                    break;
+                  case '&':
+                    key.textContent = '7';
+                    break;
+                  case '*':
+                    key.textContent = '8';
+                    break;
+                  case '(':
+                    key.textContent = '9';
+                    break;
+                  case '{':
+                    key.textContent = '9';
+                    break;
+                  case ')':
+                    key.textContent = '0';
+                    break;
+                  case '}':
+                    key.textContent = '0';
+                    break;
+        
+                  default:
+                    key.textContent = this._toggleCase(key.textContent);
+                    break;
+                }
+              }
+            }
+          },
     
     open(initialValue, oninput, onclose) {
         this.properties.value = initialValue || '';
