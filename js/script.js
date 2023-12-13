@@ -461,6 +461,31 @@ const Keyboard = {
               }
             }
           },
+          _toggleLang() {
+            this.properties.lang = this.properties.lang === 'en' ? 'ru' : 'en';
+            this.elements.keysContainer.innerHTML = '';
+            this.elements.keysContainer.appendChild(this._createKeys());
+        
+            this.elements.keys = this.elements.keysContainer.querySelectorAll(
+              '.keyboard__key'
+            );
+        
+            if (this.properties.shift) {
+              this._alternateKeys();
+            }
+          },
+        
+          _toggleCase(key) {
+            return this._isUpperCase() ? key.toUpperCase() : key.toLowerCase();
+          },
+        
+          _isUpperCase() {
+            return (
+              (this.properties.shift && !this.properties.capsLock) ||
+              (!this.properties.shift && this.properties.capsLock)
+            );
+          },      
+
     
     open(initialValue, oninput, onclose) {
         this.properties.value = initialValue || '';
