@@ -208,7 +208,7 @@ const Keyboard = {
             });
             break;
 
-            case 'caps':
+          case 'caps':
             keyElement.classList.add('keyboard__key--wide', 'keyboard__key--activatable');
             keyElement.innerHTML = this._createIconHtml('keyboard_capslock');
             if (this.properties.capsLock) {
@@ -221,285 +221,338 @@ const Keyboard = {
             });
             break;
     
-            case 'shift':
-              keyElement.classList.add('keyboard__key--wide');
-              keyElement.innerHTML = this._createIconHtml('keyboard_arrow_up');
-              if (this.properties.shift) {
-                keyElement.classList.add('keyboard__key--active-once');
-              }
-              keyElement.addEventListener('click', (e) => {
-                this._toggleShift();
-                const { lang } = this.properties;
-              });
-    
-              break;
-    
-            case 'done':
-              keyElement.classList.add('keyboard__key--dark');
-              keyElement.innerHTML = this._createIconHtml('keyboard_hide');
-              keyElement.addEventListener('click', (e) => {
-                this.close();
-                const { lang } = this.properties;
-               
-                this._triggerEvent('onclose');
-              });
-              break;
-
-              case 'lang':
-                keyElement.classList.add('keyboard__key--dark');
-                keyElement.innerHTML = this._toggleCase(this.properties.lang);
-                keyElement.addEventListener('click', (e) => {
-                  this._toggleLang();
-                  keyElement.innerHTML = this.properties.lang;
-                  const { lang } = this.properties;
-                
-                });
-                break;
-      
-              case 'space':
-                keyElement.classList.add('keyboard__key--extra-wide');
-                keyElement.innerHTML = this._createIconHtml('space_bar');
-                keyElement.addEventListener('click', (e) => {
-                  this._changeValueByPosition(' ');
-                  const { lang } = this.properties;
-                 
-                  this._triggerEvent('oninput');
-                });
-                break;
-          
-                case 'left':
-                  keyElement.classList.add('keyboard__key--wide');
-                  keyElement.innerHTML = this._createIconHtml('arrow_back');
-                  keyElement.addEventListener('click', (e) => {
-                    const pos = this.properties.position - 1;
-                    this.properties.position = pos >= 0 ? pos : 0;
-                    const { lang } = this.properties;
-                  
-                    this._changePosition();
-                  });
-                  break;
-        
-                case 'right':
-                  keyElement.classList.add('keyboard__key--wide');
-                  keyElement.innerHTML = this._createIconHtml('arrow_forward');
-                  keyElement.addEventListener('click', (e) => {
-                    const pos = this.properties.position + 1;
-                    const length = this.properties.value.length;
-                    this.properties.position = pos < length ? pos : length;
-                    const { lang } = this.properties;
-                  
-                    this._changePosition();
-                  });
-                  break;
-        
-                default:
-                  keyElement.textContent = this._toggleCase(key);
-                  keyElement.addEventListener('click', (e) => {
-                    this._changeValueByPosition(keyElement.textContent);
-                    this._triggerEvent('oninput');
-                    const { lang } = this.properties;
-                 
-                  });
-                  break;
-              }
-        
-              fragment.appendChild(keyElement);
-        
-              if (insertLineBreak) {
-                fragment.appendChild(document.createElement('br'));
-              }
-            });
-        
-            return fragment;
-          },
-
-          _changeValueByPosition(text) {
-            const { position, value } = this.properties;
-            const length = value.length;
-            const keyVal = this._toggleCase(text);
-            this.properties.value = `${value.slice(0, position)}${keyVal}${value.slice(
-              position,
-              length
-            )}`;
-          },
-        
-        
-          _triggerEvent(handlerName, args) {
-            if (typeof this.eventHandlers[handlerName] === 'function') {
-              this.eventHandlers[handlerName](this.properties.value, args);
-            }
-          },
-        
-          _toggleCapsLock() {
-            this.properties.capsLock = !this.properties.capsLock;
-            const capsLock = this.properties.capsLock;
-            for (const key of this.elements.keys) {
-              if (key.childElementCount === 0) {
-                key.textContent = this._toggleCase(key.textContent);
-              } else {
-                if (key.children[0].textContent === 'keyboard_capslock') {
-                  key.classList.toggle('keyboard__key--active', capsLock);
-                }
-              }
-            }
-          },
-          _alternateKeys() {
-            for (const key of this.elements.keys) {
-              if (key.childElementCount === 0) {
-                switch (key.textContent) {
-                  case ',':
-                    key.textContent = ';';
-                    break;
-                  case '.':
-                    key.textContent = ':';
-                    break;
-                  case '?':
-                    key.textContent = '/';
-                    break;
-                  case ';':
-                    key.textContent = ',';
-                    break;
-                  case ':':
-                    key.textContent = '.';
-                    break;
-                  case '/':
-                    key.textContent = '?';
-                    break;
-                  case '1':
-                    key.textContent = '!';
-                    break;
-                  case '2':
-                    if (this.properties.lang === 'en') {
-                      key.textContent = '@';
-                    } else {
-                      key.textContent = '"';
-                    }
-                    break;
-                  case '3':
-                    if (this.properties.lang === 'en') {
-                      key.textContent = '#';
-                    } else {
-                      key.textContent = '№';
-                    }
-                    break;
-                  case '4':
-                    key.textContent = '$';
-                    break;
-                  case '5':
-                    key.textContent = '%';
-                    break;
-                  case '6':
-                    key.textContent = '^';
-                    break;
-                  case '7':
-                    key.textContent = '&';
-                    break;
-                  case '8':
-                    key.textContent = '*';
-                    break;
-                  case '9':
-                    if (this.properties.lang === 'en') {
-                      key.textContent = '(';
-                    } else {
-                      key.textContent = '{';
-                    }
-                    break;
-                  case '0':
-                    if (this.properties.lang === 'en') {
-                      key.textContent = ')';
-                    } else {
-                      key.textContent = '}';
-                    }
-                    break;
-                  case '!':
-                    key.textContent = '1';
-                    break;
-                  case '@':
-                    key.textContent = '2';
-                    break;
-                  case '"':
-                    key.textContent = '2';
-                    break;
-                  case '#':
-                    key.textContent = '3';
-                    break;
-                  case '№':
-                    key.textContent = '3';
-                    break;
-                  case '$':
-                    key.textContent = '4';
-                    break;
-                  case '%':
-                    key.textContent = '5';
-                    break;
-                  case '^':
-                    key.textContent = '6';
-                    break;
-                  case '&':
-                    key.textContent = '7';
-                    break;
-                  case '*':
-                    key.textContent = '8';
-                    break;
-                  case '(':
-                    key.textContent = '9';
-                    break;
-                  case '{':
-                    key.textContent = '9';
-                    break;
-                  case ')':
-                    key.textContent = '0';
-                    break;
-                  case '}':
-                    key.textContent = '0';
-                    break;
-        
-                  default:
-                    key.textContent = this._toggleCase(key.textContent);
-                    break;
-                }
-              }
-            }
-          },
-          _toggleLang() {
-            this.properties.lang = this.properties.lang === 'en' ? 'ru' : 'en';
-            this.elements.keysContainer.innerHTML = '';
-            this.elements.keysContainer.appendChild(this._createKeys());
-        
-            this.elements.keys = this.elements.keysContainer.querySelectorAll(
-              '.keyboard__key'
-            );
-        
+          case 'shift':
+            keyElement.classList.add('keyboard__key--wide');
+            keyElement.innerHTML = this._createIconHtml('keyboard_arrow_up');
             if (this.properties.shift) {
-              this._alternateKeys();
+              keyElement.classList.add('keyboard__key--active-once');
             }
-          },
+            keyElement.addEventListener('click', (e) => {
+              this._toggleShift();
+              const { lang } = this.properties;
+            });
+    
+            break;
+  
+          case 'done':
+            keyElement.classList.add('keyboard__key--dark');
+            keyElement.innerHTML = this._createIconHtml('keyboard_hide');
+            keyElement.addEventListener('click', (e) => {
+              this.close();
+              const { lang } = this.properties;
+               
+              this._triggerEvent('onclose');
+            });
+            break;
+
+          case 'lang':
+            keyElement.classList.add('keyboard__key--dark');
+            keyElement.innerHTML = this._toggleCase(this.properties.lang);
+            keyElement.addEventListener('click', (e) => {
+              this._toggleLang();
+              keyElement.innerHTML = this.properties.lang;
+              const { lang } = this.properties;
+                
+            });
+            break;
+      
+          case 'space':
+            keyElement.classList.add('keyboard__key--extra-wide');
+            keyElement.innerHTML = this._createIconHtml('space_bar');
+            keyElement.addEventListener('click', (e) => {
+              this._changeValueByPosition(' ');
+              const { lang } = this.properties;
+                 
+              this._triggerEvent('oninput');
+            });
+            break;
+          
+          case 'left':
+            keyElement.classList.add('keyboard__key--wide');
+            keyElement.innerHTML = this._createIconHtml('arrow_back');
+            keyElement.addEventListener('click', (e) => {
+              const pos = this.properties.position - 1;
+              this.properties.position = pos >= 0 ? pos : 0;
+              const { lang } = this.properties;
+                  
+              this._changePosition();
+            });
+            break;
         
-          _toggleCase(key) {
-            return this._isUpperCase() ? key.toUpperCase() : key.toLowerCase();
-          },
+          case 'right':
+            keyElement.classList.add('keyboard__key--wide');
+            keyElement.innerHTML = this._createIconHtml('arrow_forward');
+            keyElement.addEventListener('click', (e) => {
+              const pos = this.properties.position + 1;
+              const length = this.properties.value.length;
+              this.properties.position = pos < length ? pos : length;
+              const { lang } = this.properties;
+                  
+              this._changePosition();
+            });
+            break;
         
-          _isUpperCase() {
-            return (
-              (this.properties.shift && !this.properties.capsLock) ||
-              (!this.properties.shift && this.properties.capsLock)
-            );
-          },      
+          default:
+            keyElement.textContent = this._toggleCase(key);
+            keyElement.addEventListener('click', (e) => {
+              this._changeValueByPosition(keyElement.textContent);
+              this._triggerEvent('oninput');
+              const { lang } = this.properties;
+                 
+            });
+            break;
+        }
+        
+        fragment.appendChild(keyElement);
+        
+        if (insertLineBreak) {
+          fragment.appendChild(document.createElement('br'));
+        }
+      });
+        
+      return fragment;
+   },
+
+   _changeValueByPosition(text) {
+    const { position, value } = this.properties;
+    const length = value.length;
+    const keyVal = this._toggleCase(text);
+    this.properties.value = `${value.slice(0, position)}${keyVal}${value.slice(
+      position,
+      length
+    )}`;
+  },
+
+
+  _triggerEvent(handlerName, args) {
+    if (typeof this.eventHandlers[handlerName] === 'function') {
+      this.eventHandlers[handlerName](this.properties.value, args);
+    }
+  },
+
+  _toggleCapsLock() {
+    this.properties.capsLock = !this.properties.capsLock;
+    const capsLock = this.properties.capsLock;
+    for (const key of this.elements.keys) {
+      if (key.childElementCount === 0) {
+        key.textContent = this._toggleCase(key.textContent);
+      } else {
+        if (key.children[0].textContent === 'keyboard_capslock') {
+          key.classList.toggle('keyboard__key--active', capsLock);
+        }
+      }
+    }
+  },
+
+  _alternateKeys() {
+    for (const key of this.elements.keys) {
+      if (key.childElementCount === 0) {
+        switch (key.textContent) {
+          case ',':
+            key.textContent = ';';
+            break;
+          case '.':
+            key.textContent = ':';
+            break;
+          case '?':
+            key.textContent = '/';
+            break;
+          case ';':
+            key.textContent = ',';
+            break;
+          case ':':
+            key.textContent = '.';
+            break;
+          case '/':
+            key.textContent = '?';
+            break;
+          case '1':
+            key.textContent = '!';
+            break;
+          case '2':
+            if (this.properties.lang === 'en') {
+              key.textContent = '@';
+            } else {
+              key.textContent = '"';
+            }
+            break;
+          case '3':
+            if (this.properties.lang === 'en') {
+              key.textContent = '#';
+            } else {
+              key.textContent = '№';
+            }
+            break;
+          case '4':
+            key.textContent = '$';
+            break;
+          case '5':
+            key.textContent = '%';
+            break;
+          case '6':
+            key.textContent = '^';
+            break;
+          case '7':
+            key.textContent = '&';
+            break;
+          case '8':
+            key.textContent = '*';
+            break;
+          case '9':
+            if (this.properties.lang === 'en') {
+              key.textContent = '(';
+            } else {
+              key.textContent = '{';
+            }
+            break;
+          case '0':
+            if (this.properties.lang === 'en') {
+              key.textContent = ')';
+            } else {
+              key.textContent = '}';
+            }
+            break;
+          case '!':
+            key.textContent = '1';
+            break;
+          case '@':
+            key.textContent = '2';
+            break;
+          case '"':
+            key.textContent = '2';
+            break;
+          case '#':
+            key.textContent = '3';
+            break;
+          case '№':
+            key.textContent = '3';
+            break;
+          case '$':
+            key.textContent = '4';
+            break;
+          case '%':
+            key.textContent = '5';
+            break;
+          case '^':
+            key.textContent = '6';
+            break;
+          case '&':
+            key.textContent = '7';
+            break;
+          case '*':
+            key.textContent = '8';
+            break;
+          case '(':
+            key.textContent = '9';
+            break;
+          case '{':
+            key.textContent = '9';
+            break;
+          case ')':
+            key.textContent = '0';
+            break;
+          case '}':
+            key.textContent = '0';
+            break;
+
+          default:
+            key.textContent = this._toggleCase(key.textContent);
+            break;
+        }
+      }
+    }
+  },
+
+  _toggleShift(changed = true) {
+    this.properties.shift = !this.properties.shift;
+    const shift = this.properties.shift;
+    if (changed) {
+      this._alternateKeys();
+      for (const key of this.elements.keys) {
+        if (key.childElementCount !== 0) {
+          if (key.children[0].textContent === 'keyboard_arrow_up') {
+            key.classList.toggle('keyboard__key--active-once', shift);
+          }
+        }
+      }
+    }
+  },
+
+  _changePosition() {
+    const position = this.properties.position;
+    this.elements.current.selectionStart = this.elements.current.selectionEnd = position;
+  },
+
+  _toggleVoice() {
+    this.properties.voice = !this.properties.voice;
+    const { lang, voice } = this.properties;
+    const index = this.keyLayout[lang].indexOf('voice');
+    if (index !== -1) {
+      if (voice) {
+        this.elements.keys[index].innerHTML = this._createIconHtml('mic_off');
+
+        this.elements.keys[index].classList.add('keyboard__key--active-once');
+      } else {
+        this.elements.keys[index].innerHTML = this._createIconHtml(
+          'keyboard_voice'
+        );
+        this.elements.keys[index].classList.remove(
+          'keyboard__key--active-once'
+        );
+      }
+    }
+  },
+  
+  _toggleLang() {
+    this.properties.lang = this.properties.lang === 'en' ? 'ru' : 'en';
+    this.elements.keysContainer.innerHTML = '';
+    this.elements.keysContainer.appendChild(this._createKeys());
+
+    this.elements.keys = this.elements.keysContainer.querySelectorAll(
+      '.keyboard__key'
+    );
+
+    if (this.properties.shift) {
+      this._alternateKeys();
+    }
+  },
+
+  _toggleCase(key) {
+    return this._isUpperCase() ? key.toUpperCase() : key.toLowerCase();
+  },
+
+  _isUpperCase() {
+    return (
+      (this.properties.shift && !this.properties.capsLock) ||
+      (!this.properties.shift && this.properties.capsLock)
+    );
+  },      
+
+
+open(initialValue, oninput, onclose) {
+this.properties.value = initialValue || '';
+this.eventHandlers.oninput = oninput;
+this.eventHandlers.onclose = onclose;
+this.elements.main.classList.remove('keyboard--hidden');
+},
+
+close() {
+this.properties.value = '';
+this.elements.main.classList.add('keyboard--hidden');
+},
+};
+
+window.addEventListener('DOMContentLoaded', function () {
+Keyboard.init();
+});
+
 
     
-    open(initialValue, oninput, onclose) {
-        this.properties.value = initialValue || '';
-        this.eventHandlers.oninput = oninput;
-        this.eventHandlers.onclose = onclose;
-        this.elements.main.classList.remove('keyboard--hidden');
-      },
-    
-      close() {
-        this.properties.value = '';
-        this.elements.main.classList.add('keyboard--hidden');
-      },
-    };
-    
-    window.addEventListener('DOMContentLoaded', function () {
-      Keyboard.init();
- });
+       
+          
+          
+         
+        
+
+
+          
