@@ -1,0 +1,43 @@
+
+   html {
+    font-size: 15px;
+  }
+  
+  body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    margin: 0 30px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin: 20px auto;
+  }
+  
+  .text-field {
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    height: 400px;
+    font-size: 1.4rem;
+  }
+  
+  .keyboard {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 50px 0;
+    background: #000000;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    transition: bottom 0.4s;
+  }
+  
+  .keyboard--hidden {
+    bottom: -100%;
+  }
+  
+  .keyboard__keys {
+    text-align: center;
+  }
