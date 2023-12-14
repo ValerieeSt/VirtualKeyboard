@@ -134,3 +134,39 @@
   .keyboard__key--shift {
     width: 8%;
   }
+
+
+  @media (max-width: 767px) {
+    .keyboard__key--wide {
+      width: 8%;
+    }
+  }
+  
+  @media (max-width: 450px) {
+    .keyboard__key--wide {
+      width: 6%;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    body {
+      font-size: 1.4rem;
+    }
+  
+    .keyboard__key {
+      width: 5%;
+    }
+  
+    .keyboard__key i {
+      font-size: 1.4rem;
+    }
+  
+    .keyboard__key--wide {
+      width: 6%;
+    }
+  
+    .keyboard__key--extra-wide {
+      width: 24%;
+    }
+  }
+  
